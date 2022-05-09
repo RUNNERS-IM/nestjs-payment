@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [ production ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v1
+
+      # Runs a single command using the runners shell
+      - name: Echo
+        run: echo Start AWS deployment now!
+
+      - name: Install node modules
+        run: yarn install
+
+      - name: Generate deployment package
+        run: yarn run build
+
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v14
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: ${{ secrets.APPLICATION_MASTER_NAME }}
+          environment_name: ${{ secrets.ENVIRONMENT_MASTER_NAME }}
+          version_label: ${{ github.sha }}
+          version_description:  ${{ github.event.head_commit.message }}
+          region: ap-northeast-2
+          deployment_package: dist.zip
+          use_existing_version_if_available: true
