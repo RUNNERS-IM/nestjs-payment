@@ -1,11 +1,7 @@
-import type {
-  CallHandler,
-  ExecutionContext,
-  NestInterceptor,
-} from '@nestjs/common';
+import type { CallHandler, ExecutionContext, NestInterceptor } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
 
-import type { UserEntity } from '../modules/user/user.entity';
+import type { UserEntity } from '../modules/user/entities/user.entity';
 import { ContextProvider } from '../providers';
 
 @Injectable()

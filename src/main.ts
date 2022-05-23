@@ -114,6 +114,11 @@ export async function bootstrap(): Promise<NestExpressApplication> {
 
   console.info(`server running on ${await app.getUrl()}`);
 
+  // if (module.hot) {
+  //   module.hot.accept();
+  //   module.hot.dispose(() => app.close());
+  // }
+
   return app;
 }
 

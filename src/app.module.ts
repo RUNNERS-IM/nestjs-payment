@@ -18,8 +18,11 @@ import { HealthCheckerModule } from './modules/health-checker/health-checker.mod
 import { UserModule } from './modules/user/user.module';
 import { ApiConfigService } from './shared/services/api-config.service';
 import { SharedModule } from './shared/shared.module';
+import {PaymentModule} from "./modules/payment/payment.module";
 
 // AdminJS.registerAdapter({ Database, Resource });
+
+console.log(process.env.ENVIRONMENT)
 
 const configModule = ConfigModule.forRoot({
   isGlobal: true,
@@ -54,6 +57,7 @@ const configModule = ConfigModule.forRoot({
     configModule,
     AuthModule,
     UserModule,
+    PaymentModule,
     TypeOrmModule.forRootAsync({
       imports: [SharedModule],
       useFactory: (configService: ApiConfigService) => configService.postgresConfig,

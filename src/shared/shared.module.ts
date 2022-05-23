@@ -8,6 +8,7 @@ import { AwsS3Service } from './services/aws-s3.service';
 import { GeneratorService } from './services/generator.service';
 import { TranslationService } from './services/translation.service';
 import { ValidatorService } from './services/validator.service';
+import {IamportService} from "./services/iamport.service";
 
 const providers = [
   ApiConfigService,
@@ -15,6 +16,7 @@ const providers = [
   AwsS3Service,
   GeneratorService,
   TranslationService,
+  IamportService
   // {
   //   provide: 'NATS_SERVICE',
   //   useFactory: (configService: ApiConfigService) => {

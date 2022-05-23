@@ -65,5 +65,5 @@ Routes is following REST standard (Richardson level 3)
   });
   fs.writeFileSync('./swagger-spec.json', JSON.stringify(document));
 
-  console.info(`Documentation: http://localhost:${process.env.PORT}/documentation`);
+  console.info(`Documentation: http://localhost:${process.env.PORT}/docs`);
 }

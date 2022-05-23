@@ -5,34 +5,32 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import type { RoleType } from '../../constants';
 import { TokenType } from '../../constants';
 import { ApiConfigService } from '../../shared/services/api-config.service';
-import type { UserEntity } from '../user/user.entity';
-import { UserService } from '../user/user.service';
+import type { UserEntity } from '../user/entities/user.entity';
+import { UserService } from '../user/services/user.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(
-    private configService: ApiConfigService,
-    private userService: UserService,
-  ) {
+  constructor(private configService: ApiConfigService, private userService: UserService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ignoreExpiration: false,
       secretOrKey: configService.authConfig.publicKey,
     });
   }
 
-  async validate(args: {
-    userId: Uuid;
-    role: RoleType;
-    type: TokenType;
-  }): Promise<UserEntity> {
+  async validate(args: { userId: Uuid; role: RoleType; type: TokenType }): Promise<UserEntity> {
     if (args.type !== TokenType.ACCESS_TOKEN) {
       throw new UnauthorizedException();
     }
 
-    const user = await this.userService.findOne({
-      id: args.userId,
-      role: args.role,
-    });
+    const user = await this.userService.findOne(
+      {
+        id: args.userId,
+        role: args.role,
+      },
+      { relations: ['buyer', 'seller'] },
+    );
+    console.log('user', user);
 
     if (!user) {
       throw new UnauthorizedException();
