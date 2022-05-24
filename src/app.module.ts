@@ -32,6 +32,7 @@ import { ApiConfigService } from './shared/services/api-config.service';
 
 // Controller
 import { AppController } from './app.controller';
+import { adminjsModule } from './admin/admin.module';
 
 // Main section
 AdminJS.registerAdapter({ Database, Resource });
@@ -72,6 +73,22 @@ const configModule = ConfigModule.forRoot({
     AuthModule,
     UserModule,
     PaymentModule,
+    // AdminModule.createAdminAsync({
+    //   useFactory: () => ({
+    //     adminJsOptions: {
+    //       rootPath: '/admin',
+    //       resources: [],
+    //     },
+    //     auth: {
+    //       async authenticate(email, password) {
+    //         return Promise.resolve({ email, password });
+    //       },
+    //       cookieName: 'cookieName',
+    //       cookiePassword: 'cookiePassword',
+    //     },
+    //   }),
+    // }),
+    adminjsModule,
     TypeOrmModule.forRootAsync({
       imports: [SharedModule],
       useFactory: (configService: ApiConfigService) => configService.postgresConfig,

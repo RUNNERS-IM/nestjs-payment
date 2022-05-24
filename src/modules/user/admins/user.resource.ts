@@ -3,8 +3,9 @@
 // import type UploadOptions from '@adminjs/upload/src/features/upload-file/types/upload-options.type';
 import dotenv from 'dotenv';
 
-import { userResourceOptions } from './user.resource.options';
+// import { userResourceOptions } from './user.resource.options';
 import { UserEntity } from '../entities/user.entity';
+import { userResourceOptions } from './user.resource.options';
 
 dotenv.config({ path: `.envs/.${process.env.ENVIRONMENT}/.env` });
 
