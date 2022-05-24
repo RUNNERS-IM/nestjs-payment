@@ -1,28 +1,42 @@
-import './boilerplate.polyfill';
-
-// import { Database, Resource } from '@adminjs/typeorm';
+// Nestjs
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
-// import AdminJS from 'adminjs';
+
+// Adminjs
+import { Database, Resource } from '@adminjs/typeorm';
+import AdminJS from 'adminjs';
+
+// Third party
+import path from 'path';
 import * as joi from 'joi';
 import { I18nJsonParser, I18nModule } from 'nestjs-i18n';
-import path from 'path';
 
-// import { adminjsModule } from './admin/admin.module';
-import { AppController } from './app.controller';
-import { AllExceptionsFilter } from './filters/all-exceptions.filter';
+// Polyfill
+import './boilerplate.polyfill';
+
+// Module
 import { AuthModule } from './modules/auth/auth.module';
-import { HealthCheckerModule } from './modules/health-checker/health-checker.module';
+// import { adminjsModule } from './admin/admin.module';
 import { UserModule } from './modules/user/user.module';
-import { ApiConfigService } from './shared/services/api-config.service';
+import { HealthCheckerModule } from './modules/health-checker/health-checker.module';
 import { SharedModule } from './shared/shared.module';
-import {PaymentModule} from "./modules/payment/payment.module";
+import { PaymentModule } from './modules/payment/payment.module';
 
-// AdminJS.registerAdapter({ Database, Resource });
+// Filter
+import { AllExceptionsFilter } from './filters/all-exceptions.filter';
 
-console.log(process.env.ENVIRONMENT)
+// Service
+import { ApiConfigService } from './shared/services/api-config.service';
+
+// Controller
+import { AppController } from './app.controller';
+
+// Main section
+AdminJS.registerAdapter({ Database, Resource });
+
+console.log(process.env.ENVIRONMENT);
 
 const configModule = ConfigModule.forRoot({
   isGlobal: true,
