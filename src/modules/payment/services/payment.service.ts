@@ -1,7 +1,6 @@
 // Nestjs
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Equal } from 'typeorm';
 
 // Common
 import { CrudService } from '../../../common/crud.service';
@@ -20,24 +19,5 @@ export class PaymentService extends CrudService<PaymentEntity> {
     private paymentRepository: PaymentRepository,
   ) {
     super(paymentRepository);
-  }
-
-  async getBuyerPayments(buyerId: Uuid) {
-    return await this.paymentRepository.find({ buyerId: Equal(buyerId) });
-  }
-
-  async getBuyerPayment(paymentId: Uuid, buyerId: Uuid) {
-    return await this.paymentRepository.findOne({ buyerId: Equal(buyerId), id: Equal(paymentId) });
-  }
-
-  async getSellerPayments(sellerId: Uuid) {
-    return await this.paymentRepository.find({ sellerId: Equal(sellerId) });
-  }
-
-  async getSellerPayment(paymentId: Uuid, sellerId: Uuid) {
-    return await this.paymentRepository.findOne({
-      sellerId: Equal(sellerId),
-      id: Equal(paymentId),
-    });
   }
 }

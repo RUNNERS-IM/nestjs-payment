@@ -1,12 +1,22 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Request } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Request,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiTag } from '../../constants/api-tag';
 import { UserService } from '../user/services/user.service';
 import { AuthService } from './auth.service';
 import { UserLoginedResponse } from '../user/responses/user-logined.response';
-import { UserRegisterDto } from './dtos/user-register.dto';
+import { CreateUserDto } from '../user/dtos/create-user.dto';
 import { UserRegisteredResponse } from '../user/responses/user-registered.response';
 import { UserLoginDto } from './dtos/user-login.dto';
+import { UserEntity } from '../user/entities/user.entity';
+import { TokenDto } from './dtos/token.dto';
 
 @Controller('auth')
 @ApiTags(ApiTag.AUTH)
@@ -16,13 +26,23 @@ export class AuthController {
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
-    summary: '유저등록 API',
-    description: '유저등록하는 API 입니다.',
+    summary: '유저 등록 API',
+    description: '유저 등록하는 API 입니다.',
   })
   @ApiCreatedResponse({ description: '유저등록 성공시 결과 예시', type: UserRegisteredResponse })
-  async signup(@Request() req, @Body() userRegisterDto: UserRegisterDto) {
-    const user = await this.userService.findOneOrCreate({ nemoId: userRegisterDto.nemoId });
-    return new UserRegisteredResponse(user);
+  async signup(@Request() req, @Body() createUserDto: CreateUserDto) {
+    let user: UserEntity = await this.userService.findOne({ key: createUserDto.key });
+    if (user) {
+      throw new UnauthorizedException('이미 등록된 유저입니다');
+    }
+    user = await this.userService.create(createUserDto);
+
+    const token: TokenDto = await this.authService.createAccessToken({
+      id: user.id,
+      role: user.role,
+    });
+
+    return new UserRegisteredResponse(user, token);
   }
 
   @Post('login')
@@ -33,16 +53,13 @@ export class AuthController {
   })
   @ApiOkResponse({ description: '로그인 성공시 결과 예시', type: UserLoginedResponse })
   async login(@Request() req, @Body() userLoginDto: UserLoginDto) {
-    const user = await this.userService.findOne(
-      { id: userLoginDto.id },
-      { relations: ['buyer', 'seller'] },
-    );
+    const user: UserEntity = await this.userService.findOneOrFail({ id: userLoginDto.id });
 
     const token = await this.authService.createAccessToken({
       id: user.id,
       role: user.role,
     });
 
-    return new UserLoginedResponse(token);
+    return new UserLoginedResponse(user, token);
   }
 }

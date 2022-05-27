@@ -1,24 +1,39 @@
+// Nestjs
+import { ApiProperty } from '@nestjs/swagger';
+
+// Typeorm
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
+// Third party
+import { IsNumber, IsUUID, ValidateNested } from 'class-validator';
+
+// Entity
 import { AbstractEntity } from '../../../common/abstract.entity';
-import { ApiProperty } from '@nestjs/swagger';
-import { IsUUID } from 'class-validator';
-import { SellerEntity } from '../../user/entities/seller.entity';
 import { PaymentEntity } from './payment.entity';
 
+// Constants
+import { sampleUuid } from '../../../constants/sample';
+import { Type } from 'class-transformer';
+
+// Main section
 @Entity({ name: 'payment_cancels' })
 export class PaymentCancelEntity extends AbstractEntity {
   // ManyToOne fields
-  @ApiProperty({ type: 'string' })
-  @IsUUID()
-  @Column({ type: 'uuid' })
-  paymentId: Uuid;
-
-  @ManyToOne(() => SellerEntity, (seller) => seller.payments, { onDelete: 'CASCADE' })
+  @Type(() => PaymentEntity)
+  @ValidateNested()
+  @ManyToOne(() => PaymentEntity, (payment) => payment.paymentCancels, { onDelete: 'RESTRICT' })
   @JoinColumn({ name: 'sellerId' })
   payment: PaymentEntity;
 
+  @Type()
+  @ApiProperty({ type: 'string', default: sampleUuid })
+  @IsUUID()
+  @Column({ type: 'uuid', default: sampleUuid })
+  paymentId: Uuid;
+
+  // Basic fields
   @ApiProperty({ type: 'number' })
+  @IsNumber()
   @Column({ nullable: true })
   amount: number;
 }

@@ -2,38 +2,47 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 // Typeorm
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 
 // Entity
 import { AbstractEntity } from '../../../common/abstract.entity';
-import { IsInt, IsPositive, IsUUID } from 'class-validator';
-import { SellerEntity } from '../../user/entities/seller.entity';
-import { BuyerEntity } from '../../user/entities/buyer.entity';
+import { IsInt, IsPositive, IsString, IsUUID, ValidateNested } from 'class-validator';
+import { sampleUuid } from '../../../constants/sample';
+import { PaymentEntity } from './payment.entity';
+import { Type } from 'class-transformer';
+import { UserEntity } from '../../user/entities/user.entity';
 
 // Main section
 @Entity({ name: 'payment_prepares' })
 export class PaymentPrepareEntity extends AbstractEntity {
   // ManyToOne fields
-  @ApiProperty({ type: 'string' })
+  @Type(() => UserEntity)
+  @ValidateNested()
+  @ManyToOne(() => UserEntity, (seller) => seller.paymentPreparesSold, { onDelete: 'RESTRICT' })
+  @JoinColumn({ name: 'sellerId' })
+  seller: UserEntity;
+
+  @Type()
+  @ApiProperty({ type: 'string', default: sampleUuid })
   @IsUUID()
   @Column({ type: 'uuid' })
   sellerId: Uuid;
 
-  @ManyToOne(() => SellerEntity, (seller) => seller.payments, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'sellerId' })
-  seller: SellerEntity;
+  @Type(() => UserEntity)
+  @ValidateNested()
+  @ManyToOne(() => UserEntity, (buyer) => buyer.paymentPreparesBought, { onDelete: 'RESTRICT' })
+  @JoinColumn({ name: 'buyerId' })
+  buyer: UserEntity;
 
-  @ApiProperty({ type: 'string' })
+  @Type()
+  @ApiProperty({ type: 'string', default: sampleUuid })
   @IsUUID()
   @Column({ type: 'uuid' })
   buyerId: Uuid;
 
-  @ManyToOne(() => BuyerEntity, (buyer) => buyer.payments, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'buyerId' })
-  buyer: BuyerEntity;
-
   // Basic fields
   @ApiProperty({ type: 'string' })
+  @IsString()
   @Column({ nullable: true })
   merchantUid: string;
 
@@ -46,4 +55,17 @@ export class PaymentPrepareEntity extends AbstractEntity {
   @ApiProperty({ type: 'number' })
   @Column({ nullable: false })
   amount: number;
+
+  // OneToOne fields
+  @Type(() => PaymentEntity)
+  @ValidateNested()
+  @OneToOne(() => PaymentEntity, (payment) => payment.paymentPrepare)
+  @JoinColumn({ name: 'userId' })
+  payment: PaymentEntity;
+
+  @Type()
+  @ApiProperty({ type: 'string', description: '결제 id' })
+  @IsUUID()
+  @Column({ nullable: true })
+  paymentId: Uuid;
 }

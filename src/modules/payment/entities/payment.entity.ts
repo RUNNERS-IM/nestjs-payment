@@ -2,264 +2,314 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 // Typeorm
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 
 // Common
 import { AbstractEntity } from '../../../common/abstract.entity';
 
 // Constants
 // Third party
-import { Allow, IsUUID } from 'class-validator';
+import { IsNumber, IsPositive, IsString, IsUUID, ValidateNested } from 'class-validator';
 
 // Entity
-import { SellerEntity } from '../../user/entities/seller.entity';
-import { BuyerEntity } from '../../user/entities/buyer.entity';
+import { CardEntity } from '../../card/entities/card.entity';
+import { Type } from 'class-transformer';
+import { PaymentPrepareEntity } from './payment-prepare.entity';
+import { sampleUuid } from '../../../constants/sample';
+import { UserEntity } from '../../user/entities/user.entity';
+import { PaymentCancelEntity } from './payment-cancel.entity';
 
 // Main Section
 @Entity({ name: 'payments' })
 export class PaymentEntity extends AbstractEntity {
   // ManyToOne fields
-  @ApiProperty({ type: 'string' })
+  @Type(() => UserEntity)
+  @ValidateNested()
+  @ManyToOne(() => UserEntity, (seller) => seller.paymentsSold, { onDelete: 'RESTRICT' })
+  @JoinColumn({ name: 'sellerId' })
+  seller: UserEntity;
+
+  @Type()
+  @ApiProperty({ type: 'string', default: sampleUuid })
   @IsUUID()
-  @Column({ type: 'uuid' })
+  @Column({ type: 'uuid', nullable: false })
   sellerId: Uuid;
 
-  @ManyToOne(() => SellerEntity, (seller) => seller.payments, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'sellerId' })
-  seller: SellerEntity;
+  @Type(() => UserEntity)
+  @ValidateNested()
+  @ManyToOne(() => UserEntity, (buyer) => buyer.paymentsBought, { onDelete: 'RESTRICT' })
+  @JoinColumn({ name: 'buyerId' })
+  buyer: UserEntity;
 
-  @ApiProperty({ type: 'string' })
+  @Type()
+  @ApiProperty({ type: 'string', default: sampleUuid })
   @IsUUID()
-  @Column({ type: 'uuid' })
+  @Column({ type: 'uuid', nullable: false })
   buyerId: Uuid;
 
-  @ManyToOne(() => BuyerEntity, (buyer) => buyer.payments, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'buyerId' })
-  buyer: BuyerEntity;
+  @Type(() => CardEntity)
+  @ValidateNested()
+  @ManyToOne(() => CardEntity, (card) => card.payments, { onDelete: 'RESTRICT' })
+  @JoinColumn({ name: 'cardId' })
+  card: CardEntity;
+
+  @Type()
+  @ApiProperty({ type: 'string', default: sampleUuid })
+  @IsUUID()
+  @Column({ type: 'uuid', nullable: true })
+  cardId: Uuid;
+
+  // OneToOne fields
+  @Type(() => PaymentPrepareEntity)
+  @ValidateNested()
+  @OneToOne(() => PaymentPrepareEntity, (paymentPrepare) => paymentPrepare.payment)
+  @JoinColumn({ name: 'userId' })
+  paymentPrepare: PaymentPrepareEntity;
+
+  @Type()
+  @ApiProperty({ type: 'string', description: '유저 id', default: sampleUuid })
+  @IsUUID()
+  @Column({ nullable: false })
+  paymentPrepareId: Uuid;
+
+  // OneToMany fields
+  @Type(() => PaymentCancelEntity)
+  @ValidateNested({ each: true })
+  @OneToMany(() => PaymentCancelEntity, (paymentCancel) => paymentCancel.payment)
+  paymentCancels: PaymentCancelEntity[];
 
   // Iamport fields
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  imp_uid?: string;
+  impUid?: string;
 
-  @Allow()
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ type: 'string', description: '가맹점 거래 고유번호' })
+  @IsString()
   @Column({ nullable: true })
-  merchant_uid?: string;
+  merchantUid?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  pay_method?: string;
+  payMethod?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
   channel?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  pg_provider?: string;
+  pgProvider?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  emb_pg_provider?: string;
+  embPgProvider?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  pg_tid?: string;
+  pgTid?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  pg_id?: string;
+  pgId?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
   escrow?: boolean;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  apply_num?: string;
+  applyNum?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  bank_code?: string;
+  bankCode?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  bank_name?: string;
+  bankName?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  card_code?: string;
+  cardCode?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  card_name?: string;
+  cardName?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsNumber()
+  @IsPositive()
   @Column({ nullable: true })
-  card_quota?: number;
+  cardQuota?: number;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  card_number?: string;
+  cardNumber?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  card_type?: string;
+  cardType?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  vbank_code?: string;
+  vbankCode?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  vbank_name?: string;
+  vbankName?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  vbank_num?: string;
+  vbankNum?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  vbank_holder?: string;
+  vbankHolder?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsNumber()
+  @IsPositive()
   @Column({ nullable: true })
-  vbank_date?: number;
+  vbankDate?: number;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsNumber()
+  @IsPositive()
   @Column({ nullable: true })
-  vbank_issued_at?: number;
+  vbankIssuedAt?: number;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
   name?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsNumber()
+  @IsPositive()
   @Column({ nullable: true })
   amount?: number;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsNumber()
+  @IsPositive()
   @Column({ nullable: true })
-  cancel_amount?: number;
+  cancelAmount?: number;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
   currency?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  buyer_name?: string;
+  buyerName?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  buyer_email?: string;
+  buyerEmail?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  buyer_tel?: string;
+  buyerTel?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  buyer_addr?: string;
+  buyerAddr?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  buyer_postcode?: string;
+  buyerPostcode?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  custom_data?: string;
+  customData?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  user_agent?: string;
+  userAgent?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
   status?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsNumber()
+  @IsPositive()
   @Column({ nullable: true })
-  started_at?: number;
+  startedAt?: number;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsNumber()
+  @IsPositive()
   @Column({ nullable: true })
-  paid_at?: number;
+  paidAt?: number;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsNumber()
+  @IsPositive()
   @Column({ nullable: true })
-  failed_at?: number;
+  failedAt?: number;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsNumber()
+  @IsPositive()
   @Column({ nullable: true })
-  cancelled_at?: number;
+  cancelledAt?: number;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  fail_reason?: string;
+  failReason?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  cancel_reason?: string;
+  cancelReason?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  receipt_url?: string;
+  receiptUrl?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  cash_receipt_issued?: boolean;
+  cashReceiptIssued?: boolean;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  customer_uid?: string;
+  customerUid?: string;
 
-  @Allow()
   @ApiPropertyOptional()
+  @IsString()
   @Column({ nullable: true })
-  customer_uid_usage?: string;
+  customerUidUsage?: string;
 }

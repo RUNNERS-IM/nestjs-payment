@@ -11,6 +11,8 @@ import type { Constructor } from '../types';
 import type { AbstractDto, AbstractTranslationDto } from './dto/abstract.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsUUID } from 'class-validator';
+import { sampleUuid } from '../constants/sample';
+import { Type } from 'class-transformer';
 
 /**
  * Abstract Entity
@@ -32,7 +34,8 @@ export abstract class AbstractEntity<DTO extends AbstractDto = AbstractDto, O = 
   extends BaseEntity
   implements IAbstractEntity<DTO, O>
 {
-  @ApiProperty({ type: 'string' })
+  @Type()
+  @ApiProperty({ type: 'string', default: sampleUuid })
   @IsUUID()
   @PrimaryGeneratedColumn('uuid')
   id: Uuid;

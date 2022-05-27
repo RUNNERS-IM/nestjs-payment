@@ -1,5 +1,5 @@
 // Nestjs
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 
 // Response
 import {
@@ -14,18 +14,18 @@ import { PaymentPrepareEntity } from '../entities/payment-prepare.entity';
 
 // Main section
 export class PaymentPrepareCreateResponse extends CreateResponse<PaymentPrepareEntity> {
-  @ApiProperty({ type: PaymentPrepareEntity })
+  @ApiPropertyOptional({ type: PaymentPrepareEntity })
   data?: PaymentPrepareEntity; // 결과 데이터
 }
 export class PaymentPrepareListResponse extends ListResponse<PaymentPrepareEntity> {
-  @ApiProperty({ type: [PaymentPrepareEntity] })
+  @ApiPropertyOptional({ type: [PaymentPrepareEntity], isArray: true })
   data?: PaymentPrepareEntity[]; // 결과 데이터
 }
 export class PaymentPrepareRetrieveResponse extends RetrieveResponse<PaymentPrepareEntity> {
-  @ApiProperty({ type: PaymentPrepareEntity })
+  @ApiPropertyOptional({ type: PaymentPrepareEntity })
   data?: PaymentPrepareEntity; // 결과 데이터
 }
 export class PaymentPrepareUpdateResponse extends UpdateResponse<PaymentPrepareEntity> {
-  @ApiProperty({ type: PaymentPrepareEntity })
+  @ApiPropertyOptional({ type: PaymentPrepareEntity })
   data?: PaymentPrepareEntity; // 결과 데이터
 }

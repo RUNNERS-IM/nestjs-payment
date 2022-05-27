@@ -44,6 +44,21 @@ export class CrudService<T extends BaseEntity> implements ICrudService<T> {
     return await this.genericRepository.findOne(idOrOptionsOrConditions as any, maybeOptions);
   }
 
+  public async findOneOrFail(
+    idOrOptionsOrConditions?: string | number | FindOneOptions<T> | FindConditions<T>,
+    maybeOptions?: FindOneOptions<T>,
+  ): Promise<Optional<T>> {
+    try {
+      return await this.genericRepository.findOneOrFail(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        idOrOptionsOrConditions as any,
+        maybeOptions,
+      );
+    } catch (e) {
+      throw new NotFoundException(e);
+    }
+  }
+
   // Get
   async getAll(): Promise<T[]> {
     return await this.genericRepository.find();

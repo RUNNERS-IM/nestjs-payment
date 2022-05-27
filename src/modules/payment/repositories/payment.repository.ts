@@ -1,5 +1,7 @@
+// Typeorm
 import { EntityRepository, Repository } from 'typeorm';
 
+// Entity
 import { PaymentEntity } from '../entities/payment.entity';
 
 @EntityRepository(PaymentEntity)

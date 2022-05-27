@@ -1,8 +1,17 @@
-import './src/boilerplate.polyfill';
-
+// Nestjs
 import type { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
+// Polyfill
+import './src/boilerplate.polyfill';
+
+// Third party
+import dotenv from 'dotenv';
+
+// Strategy
 import { SnakeNamingStrategy } from './src/snake-naming.strategy';
+
+// Main section
+dotenv.config({ path: `.envs/.${process.env.ENVIRONMENT}/.env` });
 
 const configs: TypeOrmModuleOptions & { seeds: string[]; factories: string[] } = {
   type: 'postgres',

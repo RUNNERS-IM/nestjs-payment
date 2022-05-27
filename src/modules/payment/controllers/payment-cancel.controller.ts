@@ -18,7 +18,7 @@ import { CreatePaymentCancelDto } from '../dtos/create-payment-cancel.dto';
 export class PaymentCancelController {
   constructor(private paymentPrepareService: PaymentPrepareService) {}
 
-  @Post(':id')
+  @Post()
   @Auth([RoleType.USER])
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
@@ -41,11 +41,11 @@ export class PaymentCancelController {
   @Auth([RoleType.USER])
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
-    summary: '결제취소 상세조회 API',
-    description: '결제취소를 상세조회하는 API 입니다.',
+    summary: '결제취소 상세 조회 API',
+    description: '결제취소를 상세 조회하는 API 입니다.',
   })
   @ApiOkResponse({
-    description: '결제취소 상세조회 성공시 결과 예시',
+    description: '결제취소 상세 조회 성공시 결과 예시',
     type: PaymentCancelRetrieveResponse,
   })
   async getPaymentCancel(@AuthUser() user: UserEntity) {

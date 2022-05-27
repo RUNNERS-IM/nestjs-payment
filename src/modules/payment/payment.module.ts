@@ -10,6 +10,9 @@ import { PaymentCancelService } from './services/payment-cancel.service';
 import { PaymentPrepareService } from './services/payment-prepare.service';
 import { PaymentCancelController } from './controllers/payment-cancel.controller';
 import { PaymentCancelRepository } from './repositories/payment-cancel.repository';
+import { PaymentPrepareSubscriber } from './subscribers/payment-prepare.subscriber';
+import { PaymentSubscriber } from './subscribers/payment.subscriber';
+import { CardModule } from '../card/card.module';
 
 @Module({
   imports: [
@@ -18,9 +21,16 @@ import { PaymentCancelRepository } from './repositories/payment-cancel.repositor
       PaymentPrepareRepository,
       PaymentCancelRepository,
     ]),
+    CardModule,
   ],
   controllers: [PaymentController, PaymentPrepareController, PaymentCancelController],
   exports: [PaymentService, PaymentPrepareService, PaymentCancelService],
-  providers: [PaymentService, PaymentPrepareService, PaymentCancelService],
+  providers: [
+    PaymentService,
+    PaymentPrepareService,
+    PaymentCancelService,
+    PaymentPrepareSubscriber,
+    PaymentSubscriber,
+  ],
 })
 export class PaymentModule {}

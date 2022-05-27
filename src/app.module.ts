@@ -33,6 +33,7 @@ import { ApiConfigService } from './shared/services/api-config.service';
 // Controller
 import { AppController } from './app.controller';
 import { adminjsModule } from './admin/admin.module';
+import { CardModule } from './modules/card/card.module';
 
 // Main section
 AdminJS.registerAdapter({ Database, Resource });
@@ -44,7 +45,7 @@ const configModule = ConfigModule.forRoot({
   ignoreEnvFile: process.env.NODE_ENV === 'production',
   envFilePath: `.envs/.${process.env.ENVIRONMENT}/.env`,
   validationSchema: joi.object({
-    NODE_ENV: joi.string().valid('development', 'test', 'production').required(),
+    NODE_ENV: joi.string().valid('test', 'local', 'pre-production', 'production').required(),
 
     // APP
     PORT: joi.string().required(),
@@ -70,25 +71,11 @@ const configModule = ConfigModule.forRoot({
 @Module({
   imports: [
     configModule,
+    adminjsModule,
     AuthModule,
     UserModule,
     PaymentModule,
-    // AdminModule.createAdminAsync({
-    //   useFactory: () => ({
-    //     adminJsOptions: {
-    //       rootPath: '/admin',
-    //       resources: [],
-    //     },
-    //     auth: {
-    //       async authenticate(email, password) {
-    //         return Promise.resolve({ email, password });
-    //       },
-    //       cookieName: 'cookieName',
-    //       cookiePassword: 'cookiePassword',
-    //     },
-    //   }),
-    // }),
-    adminjsModule,
+    CardModule,
     TypeOrmModule.forRootAsync({
       imports: [SharedModule],
       useFactory: (configService: ApiConfigService) => configService.postgresConfig,
@@ -107,7 +94,6 @@ const configModule = ConfigModule.forRoot({
       inject: [ApiConfigService],
     }),
     HealthCheckerModule,
-    // adminjsModule,
   ],
   providers: [
     {

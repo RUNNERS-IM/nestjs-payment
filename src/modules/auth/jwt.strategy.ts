@@ -23,14 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException();
     }
 
-    const user = await this.userService.findOne(
-      {
-        id: args.userId,
-        role: args.role,
-      },
-      { relations: ['buyer', 'seller'] },
-    );
-    console.log('user', user);
+    const user = await this.userService.findOne({ id: args.userId });
 
     if (!user) {
       throw new UnauthorizedException();

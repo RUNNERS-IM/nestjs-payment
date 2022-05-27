@@ -2,8 +2,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 // Dto
-import { UserRegisteredDto } from '../../auth/dtos/user-registered.dto';
+import { UserDto } from '../dtos/user.dto';
+
+// Entity
 import { UserEntity } from '../entities/user.entity';
+import { TokenDto } from '../../auth/dtos/token.dto';
 
 // Main section
 export class UserRegisteredResponse {
@@ -14,9 +17,12 @@ export class UserRegisteredResponse {
   message: string = '유저 등록을 완료하였습니다.'; // 상세 메세지
 
   @ApiProperty()
-  data: UserRegisteredDto;
+  data: { user: UserDto; token: TokenDto };
 
-  constructor(user: UserEntity) {
-    this.data = new UserRegisteredDto(user);
+  constructor(user: UserEntity, token: TokenDto) {
+    this.data = {
+      user: new UserDto(user),
+      token: token,
+    };
   }
 }

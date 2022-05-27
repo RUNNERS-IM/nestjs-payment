@@ -34,6 +34,12 @@ const translations = {
     loginWelcome: `${process.env.SERVICE_TITLE || '어드민'}에 오신 것을 환영합니다!`,
     dashboard: '대시보드',
     UserEntity: '유저',
+    SellerEntity: '판매자',
+    BuyerEntity: '구매자',
+    PaymentEntity: '결제내역',
+    PaymentPrepareEntity: '사전결제내역',
+    PaymentCancelEntity: '결제취소내역',
+    CardEntity: '카드',
   },
   properties: {
     length: '길이',

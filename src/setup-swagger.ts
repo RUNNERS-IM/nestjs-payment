@@ -1,10 +1,16 @@
+// Nestjs
 import type { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+
+// Third party
+import dotenv from 'dotenv';
 import * as fs from 'fs';
+
+dotenv.config({ path: `.envs/.${process.env.ENVIRONMENT}/.env` });
 
 export function setupSwagger(app: INestApplication): void {
   const documentBuilder = new DocumentBuilder()
-    .setTitle('API')
+    .setTitle(process.env.SERVICE_TITLE + ' API')
     .setDescription(
       `### REST
 

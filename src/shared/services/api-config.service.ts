@@ -84,7 +84,7 @@ export class ApiConfigService {
       entities,
       migrations,
       keepConnectionAlive: !this.isTest,
-      dropSchema: false,
+      dropSchema: false, // this.isTest
       type: 'postgres',
       name: 'default',
       host: this.getString('DB_HOST'),
