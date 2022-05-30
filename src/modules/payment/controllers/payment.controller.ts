@@ -42,9 +42,12 @@ export class PaymentController {
 <p>
 <h1>일반결제 개발 가이드</h1>
 <p>
-<a href="https://docs.iamport.kr/implementation/payment">아임포트 일반결제 연동하기</a>
+<a href="https://docs.iamport.kr/implementation/payment">아임포트 일반결제 연동</a>
+<a href="https://github.com/iamport/iamport-manual/blob/master/%EC%9D%B8%EC%A6%9D%EA%B2%B0%EC%A0%9C/sample/uplus.md">토스 일반결제 연동</a>
+<a href="https://github.com/iamport/iamport-manual/blob/master/%EC%9D%B8%EC%A6%9D%EA%B2%B0%EC%A0%9C/sample/kakao.md">카카오페이 일반결제 연동</a>
+<a href="https://github.com/iamport/iamport-manual/blob/master/%EC%9D%B8%EC%A6%9D%EA%B2%B0%EC%A0%9C/sample/kakao.md">네이버페이 일반결제 연동</a>
 </p>
-    `,
+`,
   })
   @ApiOkResponse({
     description: '일반 결제 성공시 결과 예시',

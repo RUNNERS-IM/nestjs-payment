@@ -5,7 +5,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
 // Third party
-import { Type } from 'class-transformer';
+import { Exclude, Type } from 'class-transformer';
 import {
   IsCreditCard,
   IsInt,
@@ -58,6 +58,7 @@ export class CardEntity extends AbstractEntity {
     description: '카드번호(dddd-dddd-dddd-dddd)',
     default: '1234-5678-1234-5678',
   })
+  @Exclude({ toPlainOnly: true })
   @IsCreditCard()
   @Column({ nullable: false })
   cardNumber: string;
@@ -127,8 +128,18 @@ export class CardEntity extends AbstractEntity {
 
   @ApiProperty({
     type: 'string',
+    description: '카드번호 마지막 4자리',
+    default: '1234',
+  })
+  @IsString()
+  @Length(4, 4)
+  @Column({ nullable: true })
+  lastCardNumber: string;
+
+  @ApiProperty({
+    type: 'string',
     description: 'PG ID',
-    default: '123',
+    default: 'PG ID',
   })
   @IsString()
   @Column({ nullable: true })
@@ -137,7 +148,7 @@ export class CardEntity extends AbstractEntity {
   @ApiProperty({
     type: 'string',
     description: 'PG',
-    default: '123',
+    default: 'PG',
   })
   @IsString()
   @Column({ nullable: true })

@@ -25,6 +25,7 @@ import {
   CardUpdateResponse,
 } from '../responses/card.response';
 import { CreateCardDto } from '../dtos/create-card.dto';
+import { ApiListResponse } from '../../../decorators/api-list-response.decorator';
 
 @Controller(ApiPath.API + 'cards')
 @ApiTags(ApiTag.CARD)
@@ -57,10 +58,7 @@ export class CardController {
     summary: '카드 리스트 조회 API',
     description: '카드 리스트를 조회하는 API 입니다.',
   })
-  @ApiOkResponse({
-    description: '카드 리스트 조회 성공시 결과 예시',
-    type: CardListResponse,
-  })
+  @ApiListResponse(CardEntity, { description: '카드 리스트 조회 성공시 결과 예시' })
   async getCards(@AuthUser() user: UserEntity) {
     // Create card
     const cards: CardEntity[] = await this.cardService.find({ userId: user.id });

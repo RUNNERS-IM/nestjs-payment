@@ -32,7 +32,7 @@ export class PaymentCancelEntity extends AbstractEntity {
   paymentId: Uuid;
 
   // Basic fields
-  @ApiProperty({ type: 'number' })
+  @ApiProperty({ type: 'number', default: 1000 })
   @IsNumber()
   @Column({ nullable: true })
   amount: number;

@@ -3,24 +3,26 @@ import { ApiProperty } from '@nestjs/swagger';
 
 // Dto
 import { TokenDto } from '../../auth/dtos/token.dto';
-import { UserDto } from '../dtos/user.dto';
+
+// Entity
 import { UserEntity } from '../entities/user.entity';
+import { UserTokenDto } from '../dtos/user-token.dto';
 
 // Main section
 export class UserLoginedResponse {
   @ApiProperty({ default: 200 })
   statusCode = 200; // HTTP 상태 코드
 
-  @ApiProperty({ default: '상세 조회를 완료하였습니다.' })
-  message: string = '객체 상세 조회를 완료하였습니다.'; // 상세 메세지
+  @ApiProperty({ default: '유저 로그인을 완료하였습니다.' })
+  message: string = '유저 로그인을 완료하였습니다.'; // 상세 메세지
 
   @ApiProperty()
-  data: { user: UserDto; token: TokenDto };
+  data: UserTokenDto;
 
   constructor(user: UserEntity, token: TokenDto) {
     this.data = {
-      user: new UserDto(user),
-      token: token,
+      ...user,
+      ...token,
     };
   }
 }

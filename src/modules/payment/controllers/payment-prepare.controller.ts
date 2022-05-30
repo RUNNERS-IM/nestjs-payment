@@ -15,6 +15,7 @@ import {
 } from '../responses/payment-prepare.response';
 import { CreatePaymentPrepareDto } from '../dtos/create-payment-prepare.dto';
 import { PaymentPrepareEntity } from '../entities/payment-prepare.entity';
+import { ApiListResponse } from '../../../decorators/api-list-response.decorator';
 
 @Controller(ApiPath.API + 'payments/prepares')
 @ApiTags(ApiTag.PAYMENT_PREPARE)
@@ -57,10 +58,7 @@ export class PaymentPrepareController {
     summary: '사전결제 리스트 조회 API',
     description: '사전결제 리스트를 조회하는 API 입니다.',
   })
-  @ApiOkResponse({
-    description: '사전결제 리스트 조회 성공시 결과 예시',
-    type: PaymentPrepareListResponse,
-  })
+  @ApiListResponse(PaymentPrepareEntity, { description: '사전결제 리스트 조회 성공시 결과 예시' })
   async getPaymentPrepares(@AuthUser() user: UserEntity, @Request() req) {
     const paymentPrepares: PaymentPrepareEntity[] = await this.paymentPrepareService.find({
       buyerId: user.id,

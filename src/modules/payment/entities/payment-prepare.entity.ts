@@ -52,7 +52,7 @@ export class PaymentPrepareEntity extends AbstractEntity {
   @Column({ nullable: false })
   productId: number;
 
-  @ApiProperty({ type: 'number' })
+  @ApiProperty({ type: 'number', default: 1000 })
   @Column({ nullable: false })
   amount: number;
 
