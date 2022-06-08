@@ -1,7 +1,3 @@
-import dotenv from 'dotenv';
-
-dotenv.config({ path: `.envs/.${process.env.ENVIRONMENT}/.env` });
-
 const translations = {
   actions: {
     new: '새로 생성',

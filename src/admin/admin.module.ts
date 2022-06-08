@@ -24,12 +24,12 @@ export const adminjsModule = AdminModule.createAdminAsync({
       resources: [
         // User
         userResource,
-        // Payment
-        paymentResource,
-        paymentCancelResource,
-        paymentPrepareResource,
         // Card
         cardResource,
+        // Payment
+        paymentPrepareResource,
+        paymentResource,
+        paymentCancelResource,
       ],
       locale: kr,
       branding: {

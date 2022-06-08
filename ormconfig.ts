@@ -1,14 +1,17 @@
 // Nestjs
 import type { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
-// Polyfill
-import './src/boilerplate.polyfill';
-
 // Third party
 import dotenv from 'dotenv';
 
+// Polyfill
+import './src/boilerplate.polyfill';
+
 // Strategy
 import { SnakeNamingStrategy } from './src/snake-naming.strategy';
+
+// Subscriber
+import { AutoEncryptSubscriber } from 'typeorm-encrypted';
 
 // Main section
 dotenv.config({ path: `.envs/.${process.env.ENVIRONMENT}/.env` });
@@ -21,7 +24,7 @@ const configs: TypeOrmModuleOptions & { seeds: string[]; factories: string[] } =
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
   namingStrategy: new SnakeNamingStrategy(),
-  subscribers: [],
+  subscribers: [AutoEncryptSubscriber],
   entities: ['src/modules/**/*.entity{.ts,.js}', 'src/modules/**/*.view-entity{.ts,.js}'],
   migrations: ['src/database/migrations/*{.ts,.js}'],
   seeds: ['src/database/seeds/**/*{.ts,.js}'],

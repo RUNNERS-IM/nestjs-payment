@@ -6,20 +6,25 @@ import {
   InsertEvent,
   UpdateEvent,
 } from 'typeorm';
+
+// Third party
 // Entity
 import { CardEntity } from '../entities/card.entity';
 import { IamportService } from '../../../shared/services/iamport.service';
 import { UserEntity } from '../../user/entities/user.entity';
 import { BadRequestException } from '@nestjs/common';
 import { ForbiddenException } from '@nestjs/common/exceptions/forbidden.exception';
-
-// Axios
+import { CryptoService } from '../../../shared/services/crypto.service';
 
 // Main section
 
 @EventSubscriber()
 export class CardSubscriber implements EntitySubscriberInterface<CardEntity> {
-  constructor(connection: Connection, private readonly iamportService: IamportService) {
+  constructor(
+    connection: Connection,
+    private readonly iamportService: IamportService,
+    private readonly cryptoService: CryptoService,
+  ) {
     connection.subscribers.push(this);
   }
 
@@ -38,6 +43,7 @@ export class CardSubscriber implements EntitySubscriberInterface<CardEntity> {
   async setIamportBillingKey(event) {
     // Variable section
     const card: CardEntity = event.entity;
+
     const user: UserEntity = await event.manager
       .getRepository(UserEntity)
       .findOneOrFail({ id: card.userId });
@@ -48,10 +54,10 @@ export class CardSubscriber implements EntitySubscriberInterface<CardEntity> {
     const data = {
       // Card
       customer_uid: customerUid,
-      card_number: card.cardNumber,
+      card_number: this.cryptoService.decode(card.cardNumber),
       expiry: card.expiry,
-      birth: card.birth,
-      pwd_2digit: card.pwd2digit,
+      birth: this.cryptoService.decode(card.birth),
+      pwd_2digit: this.cryptoService.decode(card.pwd2digit),
       cvc: card.cvc,
       // User
       customer_name: user.name,
@@ -63,10 +69,10 @@ export class CardSubscriber implements EntitySubscriberInterface<CardEntity> {
 
     try {
       const response = await this.iamportService.iamport.subscribe_customer.create(data);
-      console.log('response', response);
       card.customerUid = response.customer_uid;
       card.pgId = response.pg_id;
       card.pgProvider = response.pg_provider;
+      card.cardName = response.card_name;
     } catch (e) {
       throw new BadRequestException(e.message);
     }
@@ -75,19 +81,18 @@ export class CardSubscriber implements EntitySubscriberInterface<CardEntity> {
   setCardNumber(event) {
     // Variable section
     const card: CardEntity = event.entity;
+    let cardNumber = this.cryptoService.decode(card.cardNumber);
+    cardNumber = String(cardNumber).replace(/\D/g, '');
 
     // Main section
-    const cardNumber = card.cardNumber.replace(/\D/g, '');
-    card.cardNumber = cardNumber;
-    const lastCardNumber = cardNumber.slice(cardNumber.length - 4);
-    card.lastCardNumber = lastCardNumber;
+    card.lastCardNumber = cardNumber.slice(cardNumber.length - 4);
   }
 
   // Listener section
   async beforeInsert(event: InsertEvent<CardEntity>) {
     this.setExpiry(event);
-    await this.setIamportBillingKey(event);
     this.setCardNumber(event);
+    await this.setIamportBillingKey(event);
   }
 
   beforeUpdate(event: UpdateEvent<CardEntity>) {

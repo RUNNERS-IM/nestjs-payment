@@ -6,6 +6,7 @@ import { CardEntity } from '../entities/card.entity';
 
 // Main section
 export class CreateCardDto extends PickType(PartialType(CardEntity), [
+  'title',
   'cardNumber',
   'expiryYear',
   'expiryMonth',

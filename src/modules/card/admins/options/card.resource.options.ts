@@ -3,12 +3,12 @@ export const cardResourceOptions = {
   listProperties: [
     'id',
     'userId',
+    'title',
     'customerUid',
-    'cardNumber',
+    'cardName',
+    'lastCardNumber',
     'expiry',
     'birth',
-    'pwd2digit',
-    'cvc',
     'createdAt',
     'updatedAt',
   ],
@@ -17,18 +17,16 @@ export const cardResourceOptions = {
   showProperties: [
     'id',
     'userId',
+    'title',
     'customerUid',
-    'cardNumber',
+    'cardName',
+    'lastCardNumber',
     'expiry',
     'birth',
-    'pwd2digit',
-    'cvc',
-    'pgId',
-    'pgProvider',
     'createdAt',
     'updatedAt',
   ],
 
   // Edit
-  editProperties: [],
+  editProperties: ['title'],
 };

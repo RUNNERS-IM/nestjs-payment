@@ -14,9 +14,9 @@ import { PublicStrategy } from './public.strategy';
     forwardRef(() => UserModule),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
-      useFactory: (configService: ApiConfigService) => ({
-        privateKey: configService.authConfig.privateKey,
-        publicKey: configService.authConfig.publicKey,
+      useFactory: (apiConfigService: ApiConfigService) => ({
+        privateKey: apiConfigService.authConfig.privateKey,
+        publicKey: apiConfigService.authConfig.publicKey,
         signOptions: {
           algorithm: 'RS256',
           // expiresIn: configService.authConfig.jwtExpirationTime,

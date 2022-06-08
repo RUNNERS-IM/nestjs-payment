@@ -2,6 +2,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+// Module
+import { SharedModule } from '../../shared/shared.module';
+
 // Controller
 import { CardController } from './controllers/card.controller';
 
@@ -16,7 +19,7 @@ import { CardSubscriber } from './subscribers/card.subscriber';
 
 // Main section
 @Module({
-  imports: [TypeOrmModule.forFeature([CardRepository])],
+  imports: [TypeOrmModule.forFeature([CardRepository]), SharedModule],
   controllers: [CardController],
   exports: [CardService],
   providers: [CardService, CardSubscriber],

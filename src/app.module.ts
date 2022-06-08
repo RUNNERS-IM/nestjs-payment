@@ -1,3 +1,5 @@
+require('../env');
+
 // Nestjs
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
@@ -37,8 +39,6 @@ import { CardModule } from './modules/card/card.module';
 
 // Main section
 AdminJS.registerAdapter({ Database, Resource });
-
-console.log(process.env.ENVIRONMENT);
 
 const configModule = ConfigModule.forRoot({
   isGlobal: true,

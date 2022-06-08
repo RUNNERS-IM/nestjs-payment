@@ -20,11 +20,12 @@ import {
 
 // Constants
 import { sampleUuid } from '../../../constants/sample';
-
 // Entity
 import { AbstractEntity } from '../../../common/abstract.entity';
 import { UserEntity } from '../../user/entities/user.entity';
 import { PaymentEntity } from '../../payment/entities/payment.entity';
+import { ExtendedColumnOptions } from 'typeorm-encrypted';
+import { encryptionOptions } from '../../../constants/encryption-options';
 
 // Main section
 @Entity({ name: 'cards' })
@@ -45,10 +46,19 @@ export class CardEntity extends AbstractEntity {
   // Basic fields
   @ApiProperty({
     type: 'string',
+    description: '카드명',
+  })
+  @IsString()
+  @Column({ nullable: true })
+  title: string;
+
+  @ApiProperty({
+    type: 'string',
     description:
       'string 타입의 고객 고유번호.\n' +
       '(결제에 사용된 카드정보를 빌링키 형태로 저장해두고 재결제에 사용하시려면 customerUid를 지정해주세요. /subscribe/payments/again, /subscribe/payments/schedule로 재결제를 진행하실 수 있습니다.)',
   })
+  @Exclude({ toPlainOnly: true })
   @IsString()
   @Column({ nullable: true })
   customerUid: string;
@@ -60,7 +70,11 @@ export class CardEntity extends AbstractEntity {
   })
   @Exclude({ toPlainOnly: true })
   @IsCreditCard()
-  @Column({ nullable: false })
+  @Column(<ExtendedColumnOptions>{
+    type: 'varchar',
+    nullable: false,
+    encrypt: encryptionOptions,
+  })
   cardNumber: string;
 
   @ApiProperty({
@@ -68,6 +82,7 @@ export class CardEntity extends AbstractEntity {
     description: '카드 유효기간(YYYY)',
     default: new Date().getFullYear(),
   })
+  @Exclude({ toPlainOnly: true })
   @IsInt()
   @IsPositive()
   @Min(2022)
@@ -80,6 +95,7 @@ export class CardEntity extends AbstractEntity {
     description: '카드 유효기간 월(MM)',
     default: new Date().getMonth() + 1,
   })
+  @Exclude({ toPlainOnly: true })
   @IsInt()
   @IsPositive()
   @Min(1)
@@ -89,7 +105,7 @@ export class CardEntity extends AbstractEntity {
 
   @ApiProperty({
     type: 'string',
-    description: '카드 유효기간(YYYY)',
+    description: '카드 유효기간(YYYY-MM)',
   })
   @IsString()
   @Length(7, 7)
@@ -101,9 +117,14 @@ export class CardEntity extends AbstractEntity {
     description: '생년월일6자리(법인카드의 경우 사업자등록번호10자리)',
     default: '920426',
   })
+  @Exclude({ toPlainOnly: true })
   @IsString()
   @Length(6, 10)
-  @Column({ nullable: true })
+  @Column(<ExtendedColumnOptions>{
+    type: 'varchar',
+    nullable: false,
+    encrypt: encryptionOptions,
+  })
   birth: string;
 
   @ApiProperty({
@@ -111,19 +132,29 @@ export class CardEntity extends AbstractEntity {
     description: '카드비밀번호 앞 2자리',
     default: '12',
   })
+  @Exclude({ toPlainOnly: true })
   @IsString()
   @Length(2, 2)
-  @Column({ nullable: false })
+  @Column(<ExtendedColumnOptions>{
+    type: 'varchar',
+    nullable: false,
+    encrypt: encryptionOptions,
+  })
   pwd2digit: string;
 
   @ApiProperty({
     type: 'string',
-    description: '카드 인증번호',
+    description: '카드 인증번호(CVC)',
     default: '123',
   })
+  @Exclude({ toPlainOnly: true })
   @IsString()
   @Length(3, 4)
-  @Column({ nullable: false })
+  @Column(<ExtendedColumnOptions>{
+    type: 'varchar',
+    nullable: false,
+    encrypt: encryptionOptions,
+  })
   cvc: string;
 
   @ApiProperty({
@@ -138,9 +169,19 @@ export class CardEntity extends AbstractEntity {
 
   @ApiProperty({
     type: 'string',
+    description: '카드명',
+    default: 'Card Company',
+  })
+  @IsString()
+  @Column({ nullable: true })
+  cardName: string;
+
+  @ApiProperty({
+    type: 'string',
     description: 'PG ID',
     default: 'PG ID',
   })
+  @Exclude({ toPlainOnly: true })
   @IsString()
   @Column({ nullable: true })
   pgId: string;
@@ -150,6 +191,7 @@ export class CardEntity extends AbstractEntity {
     description: 'PG',
     default: 'PG',
   })
+  @Exclude({ toPlainOnly: true })
   @IsString()
   @Column({ nullable: true })
   pgProvider: string;

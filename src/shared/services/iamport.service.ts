@@ -1,8 +1,13 @@
+// Nestjs
 import { Injectable } from '@nestjs/common';
+
+// Service
 import { ApiConfigService } from './api-config.service';
 
+// Third party
 var Iamport = require('iamport');
 
+// Main section
 @Injectable()
 export class IamportService {
   public readonly iamport;
@@ -13,8 +18,8 @@ export class IamportService {
   public readonly vbank;
   public readonly escrows;
 
-  constructor(public configService: ApiConfigService) {
-    const iamportConfig = configService.iamportConfig;
+  constructor(public apiConfigService: ApiConfigService) {
+    const iamportConfig = apiConfigService.iamportConfig;
     this.iamport = new Iamport(iamportConfig);
 
     // Set

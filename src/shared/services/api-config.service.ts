@@ -1,10 +1,20 @@
+require('../../../env.ts');
+
+// Nestjs
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { TypeOrmModuleOptions } from '@nestjs/typeorm';
+
+// Third party
 import { isNil } from 'lodash';
 
+// Strategy
 import { SnakeNamingStrategy } from '../../snake-naming.strategy';
 
+// Subscriber
+import { AutoEncryptSubscriber } from 'typeorm-encrypted';
+
+// Main section
 @Injectable()
 export class ApiConfigService {
   constructor(private configService: ConfigService) {}
@@ -92,7 +102,7 @@ export class ApiConfigService {
       username: this.getString('DB_USERNAME'),
       password: this.getString('DB_PASSWORD'),
       database: this.getString('DB_DATABASE'),
-      subscribers: [],
+      subscribers: [AutoEncryptSubscriber],
       migrationsRun: true,
       logging: this.getBoolean('ENABLE_ORM_LOGS'),
       namingStrategy: new SnakeNamingStrategy(),
@@ -140,6 +150,12 @@ export class ApiConfigService {
     return {
       impKey: this.getString('IMP_KEY'),
       impSecret: this.getString('IMP_SECRET'),
+    };
+  }
+
+  get cryptoConfig() {
+    return {
+      cryptoPrivateKey: this.getString('CRYPTO_PRIVATE_KEY'),
     };
   }
 
