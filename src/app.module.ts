@@ -45,7 +45,7 @@ const configModule = ConfigModule.forRoot({
   ignoreEnvFile: process.env.NODE_ENV === 'production',
   envFilePath: `.envs/.${process.env.ENVIRONMENT}/.env`,
   validationSchema: joi.object({
-    NODE_ENV: joi.string().valid('test', 'local', 'pre-production', 'production').required(),
+    NODE_ENV: joi.string().valid('test', 'local', 'production').required(),
 
     // APP
     PORT: joi.string().required(),

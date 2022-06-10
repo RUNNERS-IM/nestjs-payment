@@ -89,5 +89,5 @@ yarn.lock
 # Build
 dist.zip
 
-# AWS elastic beanstalk
-.ebextensions/01-environments.config
+# Elastic beanstalk
+.ebextensions/02-branch-environments.config
