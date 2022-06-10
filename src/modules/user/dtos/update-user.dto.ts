@@ -2,7 +2,7 @@
 import { PartialType, PickType } from '@nestjs/swagger';
 
 // Entity
-import { UserEntity } from '../../user/entities/user.entity';
+import { UserEntity } from '../entities/user.entity';
 
 // Main section
 export class UpdateUserDto extends PickType(PartialType(UserEntity), [

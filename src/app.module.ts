@@ -1,4 +1,4 @@
-require('../env');
+require('./env');
 
 // Nestjs
 import { Module } from '@nestjs/common';

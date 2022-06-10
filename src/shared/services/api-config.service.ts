@@ -1,4 +1,4 @@
-require('../../../env.ts');
+require('../../env');
 
 // Nestjs
 import { Injectable } from '@nestjs/common';
