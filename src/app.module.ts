@@ -43,7 +43,7 @@ AdminJS.registerAdapter({ Database, Resource });
 const configModule = ConfigModule.forRoot({
   isGlobal: true,
   ignoreEnvFile: process.env.NODE_ENV === 'production',
-  envFilePath: `.envs/.${process.env.ENVIRONMENT}/.env`,
+  envFilePath: `.envs/${process.env.ENVIRONMENT}.env`,
   validationSchema: joi.object({
     NODE_ENV: joi.string().valid('test', 'local', 'production').required(),
 

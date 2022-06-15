@@ -14,7 +14,7 @@ import { SnakeNamingStrategy } from './src/snake-naming.strategy';
 import { AutoEncryptSubscriber } from 'typeorm-encrypted';
 
 // Main section
-dotenv.config({ path: `.envs/.${process.env.ENVIRONMENT}/.env` });
+dotenv.config({ path: `.envs/${process.env.ENVIRONMENT}.env` });
 
 const configs: TypeOrmModuleOptions & { seeds: string[]; factories: string[] } = {
   type: 'postgres',
