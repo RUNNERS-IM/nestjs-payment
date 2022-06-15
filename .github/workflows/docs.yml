@@ -14,11 +14,11 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: '10.x'
+          node-version: '16.x'
 
-      - run: npm install -D vuepress
+      - run: yarn install -D vuepress
 
-      - run: npm run docs:build
+      - run: yarn run docs:build
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v2
