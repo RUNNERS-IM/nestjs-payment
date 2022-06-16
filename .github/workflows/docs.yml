@@ -1,6 +1,8 @@
 name: github pages
 
 on:
+  # Trigger the workflow on push request,
+  # but only for the main branch
   push:
     branches:
       - main
