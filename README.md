@@ -1,14 +1,14 @@
-# NestJS Boilerplate v8
+# NestJS Payment
 
+[![NestJS Payment](https://img.shields.io/badge/NestJS-Payment-red.svg?longCache=true&style=flat-square)](https://github.com/juliandavidmr/awesome-nestjs)
 [![Awesome NestJS](https://img.shields.io/badge/Awesome-NestJS-blue.svg?longCache=true&style=flat-square)](https://github.com/juliandavidmr/awesome-nestjs)
+> 이 프로젝트는 [NestJS](https://nestjs.com)와 [Iamport](https://www.iamport.kr)를 이용하여 PG결제, 카드결제, 취소 등 결제 API를 구현한 서버입니다.
 
-> This is an ever-evolving, very opinionated architecture and dev environment for new node projects using [NestJS](https://nestjs.com). Questions, feedback, and for now, even bikeshedding are welcome. 😄
-
-## Getting started
+## 시작하기
 
 ```bash
 # 1. Clone the repository or click on "Use this template" button.
-npx degit NarHakobyan/awesome-nest-boilerplate my-nest-app
+npx degit KimSunWook/nestjs-payment my-nest-app
 
 # 2. Enter your newly-cloned folder.
 cd my-nest-app
@@ -22,7 +22,8 @@ yarn
 When you use this template, try follow the checklist to update your info properly
 
 - [ ] Change the author name in `LICENSE`
-- [ ] Change configurations in `.env`
+- [ ] Change configurations in `.envs/local.env` 
+- [ ] Create configurations in `.envs/pre-production.env`, `.envs/production.env`
 - [ ] Remove the `.github` folder which contains the funding info
 - [ ] Clean up the README.md file
 

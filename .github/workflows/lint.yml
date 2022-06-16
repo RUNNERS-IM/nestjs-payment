@@ -5,16 +5,11 @@ on:
   # but only for the main branch
   push:
     branches:
-      - production
-      - pre-production
       - main
-      - develop
+
   pull_request:
     branches:
-      - production
-      - pre-production
       - main
-      - develop
 
 jobs:
   run-linters:
