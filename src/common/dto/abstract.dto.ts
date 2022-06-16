@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 import { DYNAMIC_TRANSLATION_DECORATOR_KEY } from '../../decorators';
 import { ContextProvider } from '../../providers';
@@ -14,6 +14,7 @@ export class AbstractDto {
   @ApiProperty()
   updatedAt: Date;
 
+  @ApiPropertyOptional({ type: () => [AbstractTranslationDto] })
   translations?: AbstractTranslationDto[];
 
   constructor(entity: AbstractEntity, options?: { excludeFields?: boolean }) {
@@ -33,11 +34,7 @@ export class AbstractDto {
       const fields: Record<string, string> = {};
 
       for (const key of Object.keys(translationEntity)) {
-        const metadata = Reflect.getMetadata(
-          DYNAMIC_TRANSLATION_DECORATOR_KEY,
-          this,
-          key,
-        );
+        const metadata = Reflect.getMetadata(DYNAMIC_TRANSLATION_DECORATOR_KEY, this, key);
 
         if (metadata) {
           fields[key] = translationEntity[key];

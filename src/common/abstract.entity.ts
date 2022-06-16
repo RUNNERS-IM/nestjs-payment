@@ -10,7 +10,7 @@ import { LanguageCode } from '../constants';
 import type { Constructor } from '../types';
 import type { AbstractDto, AbstractTranslationDto } from './dto/abstract.dto';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsUUID } from 'class-validator';
+import { Allow, IsUUID } from 'class-validator';
 import { sampleUuid } from '../constants/sample';
 import { Type } from 'class-transformer';
 
@@ -50,6 +50,8 @@ export abstract class AbstractEntity<DTO extends AbstractDto = AbstractDto, O = 
   })
   updatedAt: Date;
 
+  @Type()
+  @Allow()
   translations?: AbstractTranslationEntity[];
 
   private dtoClass: Constructor<DTO, [AbstractEntity, O?]>;

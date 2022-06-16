@@ -1,4 +1,4 @@
-require('../../../env.ts');
+require('../../env');
 
 // Nestjs
 import { Injectable } from '@nestjs/common';
@@ -134,8 +134,9 @@ export class ApiConfigService {
 
   get authConfig() {
     return {
-      privateKey: this.getString('JWT_PRIVATE_KEY'),
-      publicKey: this.getString('JWT_PUBLIC_KEY'),
+      // privateKey: this.getString('JWT_PRIVATE_KEY'),
+      // publicKey: this.getString('JWT_PUBLIC_KEY'),
+      secretKey: this.getString('JWT_SECRET'),
       jwtExpirationTime: this.getNumber('JWT_EXPIRATION_TIME'),
     };
   }
