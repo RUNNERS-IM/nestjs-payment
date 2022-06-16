@@ -19,7 +19,6 @@ import { PublicStrategy } from './public.strategy';
         // publicKey: apiConfigService.authConfig.publicKey,
         secret: apiConfigService.authConfig.secretKey,
         signOptions: {
-          algorithm: 'RS256',
           expiresIn: apiConfigService.authConfig.jwtExpirationTime,
         },
         verifyOptions: {

@@ -55,8 +55,8 @@ const configModule = ConfigModule.forRoot({
     API_VERSION: joi.string().required(),
 
     // JWT Auth
-    JWT_PRIVATE_KEY: joi.string().required(),
-    JWT_PUBLIC_KEY: joi.string().required(),
+    // JWT_PRIVATE_KEY: joi.string().required(),
+    // JWT_PUBLIC_KEY: joi.string().required(),
 
     // DB
     DB_TYPE: joi.string().required(),
