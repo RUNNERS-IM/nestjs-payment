@@ -57,8 +57,8 @@ typings/
 .yarn-integrity
 
 # dotenv environment variables file
-.envs/.pre-production/.env
-.envs/.production/.env
+.envs/pre-production.env
+.envs/production.env
 
 # next.js build output
 .next
@@ -90,4 +90,4 @@ yarn.lock
 dist.zip
 
 # AWS elastic beanstalk
-.ebextensions/01-environments.config
+.ebextensions/02-branch-environments.config
