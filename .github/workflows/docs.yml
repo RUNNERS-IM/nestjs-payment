@@ -14,9 +14,9 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '14.x'
+          node-version: '14.18.0'
 
-      - run: yarn add vuepress --dev
+      - run: yarn add vuepress@2.0.0-beta.35 --dev
 
       - run: yarn run docs:build
 

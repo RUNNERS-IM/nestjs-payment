@@ -6,14 +6,14 @@ module.exports = {
   themeConfig: {
     sidebar: [
       ['/', 'Introduction'],
-      // '/docs/development',
-      // '/docs/architecture',
-      // '/docs/naming-cheatsheet',
+      '/docs/development',
+      '/docs/architecture',
+      '/docs/naming-cheatsheet',
 
       // '/docs/routing',
       // '/docs/state',
 
-      // '/docs/linting',
+      '/docs/linting',
 
       // '/docs/editors',
       // '/docs/production',
