@@ -20,7 +20,7 @@ jobs:
         run: yarn install
 
       - name: Generate deployment package
-        run: yarn run build
+        run: yarn run build:prod
 
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v14
