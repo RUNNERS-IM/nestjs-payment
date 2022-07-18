@@ -2,7 +2,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 // Typeorm
-import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
 // Third party
 import { Exclude, Type } from 'class-transformer';
@@ -33,7 +33,7 @@ export class CardEntity extends AbstractEntity {
   // OneToOne fields
   @Type(() => UserEntity)
   @ValidateNested()
-  @OneToOne(() => UserEntity, (user) => user.cards)
+  @ManyToOne(() => UserEntity, (user) => user.cards)
   @JoinColumn({ name: 'userId' })
   user: UserEntity;
 

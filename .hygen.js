@@ -1,4 +1,4 @@
-module.exports = {
+©module.exports = {
   templates: `${__dirname}/.hygen`,
   helpers: {
     ControllerName(name) {
